@@ -1,10 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Cotacao struct {
@@ -34,6 +38,13 @@ func BuscaCotacaoHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	err = InsertDbCotacao(cotacao)
+	if err != nil {
+		fmt.Println("ERROR: ", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
@@ -57,4 +68,24 @@ func BuscaCotacao() (*Cotacao, error) {
 		return nil, err
 	}
 	return &c, nil
+}
+
+func InsertDbCotacao(c *Cotacao) error {
+	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/goexpert")
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	stmt, err := db.Prepare("insert into cotacao(bid) values(?)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(c.Usdbrl.Bid)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
