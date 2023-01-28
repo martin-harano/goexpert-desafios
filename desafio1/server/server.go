@@ -29,6 +29,7 @@ type Cotacao struct {
 
 func main() {
 	http.HandleFunc("/cotacao", BuscaCotacaoHandler)
+	fmt.Println("Service started listening at port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
@@ -49,7 +50,6 @@ func BuscaCotacaoHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	json.NewEncoder(w).Encode(cotacao)
-
 }
 
 func BuscaCotacao() (*Cotacao, error) {
