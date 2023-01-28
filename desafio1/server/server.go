@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -53,7 +55,13 @@ func BuscaCotacaoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func BuscaCotacao() (*Cotacao, error) {
-	resp, err := http.Get("https://economia.awesomeapi.com.br/json/last/USD-BRL")
+	ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
+	defer cancel()
+	req, err := http.NewRequestWithContext(ctx, "GET", "https://economia.awesomeapi.com.br/json/last/USD-BRL", nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -71,6 +79,9 @@ func BuscaCotacao() (*Cotacao, error) {
 }
 
 func InsertDbCotacao(c *Cotacao) error {
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*10)
+	defer cancel()
 	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/goexpert")
 	if err != nil {
 		return err
@@ -82,7 +93,7 @@ func InsertDbCotacao(c *Cotacao) error {
 		return err
 	}
 	defer stmt.Close()
-	_, err = stmt.Exec(c.Usdbrl.Bid)
+	_, err = stmt.ExecContext(ctx, c.Usdbrl.Bid)
 	if err != nil {
 		return err
 	}
