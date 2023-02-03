@@ -47,7 +47,7 @@ go run ./client/client.go
 ### Para encerrar:
 
 - Interrompa o serviço como o comando apropriado no terminal para cada SO (ex.: `ctrl + c`)
-- Encerre o serviço do banco com o comando:
+- Encerre, a partir do diretório `desafio1`, o serviço do banco com o comando:
 ```
 docker-compose down -v
 ```
