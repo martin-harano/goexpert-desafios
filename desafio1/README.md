@@ -2,7 +2,7 @@
 
 ## Server
 
-- Expõe uma API Rest com um método `get` para consulta do câmbio dólar-real
+- Expõe uma API Rest com um método `get` para consulta do câmbio dólar-real no endpoint `/cotacao` na porta `8080`
 - Ao receber a chamada para esta API, realiza requisição na API de consulta de câmbio no endereço `https://economia.awesomeapi.com.br/json/last/USD-BRL`
   - Tempo máximo de espera para receber a resposta é de `200 ms` utilizando o package `context`
 - Grava o resultado da cotação `bid` do campo JSON em um banco de dados `mysql` com timeout máximo de `10 ms`
