@@ -38,13 +38,15 @@ func main() {
 func BuscaCotacaoHandler(w http.ResponseWriter, r *http.Request) {
 	cotacao, err := BuscaCotacao()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusGatewayTimeout)
+		w.Write([]byte("Serviço de cotação não respondeu no tempo estimado"))
 		return
 	}
 	err = InsertDbCotacao(cotacao)
 	if err != nil {
 		fmt.Println("ERROR: ", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Não foi possível guardar informação no banco de dados"))
 		return
 	}
 

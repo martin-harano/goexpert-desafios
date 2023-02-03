@@ -36,6 +36,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	if resp.StatusCode != http.StatusOK {
+		println("Servidor retornou: ", resp.StatusCode, " - ", string(body))
+		return
+	}
+
 	cotacao, err := parseCotacao(body)
 	if err != nil {
 		panic(err)
