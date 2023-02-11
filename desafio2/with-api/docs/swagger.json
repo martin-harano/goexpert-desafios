@@ -1,0 +1,94 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API to demonstrate multithreading",
+        "title": "Desafio2 - Multithread",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Martin Harano",
+            "url": "https://github.com/martin-harano",
+            "email": "martin.harano@fullcycle.com.br"
+        },
+        "license": {
+            "name": "Martin Harano License",
+            "url": "https://github.com/martin-harano"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8000",
+    "basePath": "/",
+    "paths": {
+        "/cep/{code}": {
+            "get": {
+                "description": "Get a CEP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CEP"
+                ],
+                "summary": "Get a CEP",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "8-digit number",
+                        "description": "ZIP code",
+                        "name": "code",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetCepOutput"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.GetCepOutput": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

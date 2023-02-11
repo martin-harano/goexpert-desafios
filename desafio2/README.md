@@ -43,3 +43,9 @@ Ou, testar com extensão `REST Client` do VSCode:
 
 - Acessar `./with-api/test/cep.http`.
 - Enviar a request (método GET) de teste do arquivo.
+
+Ou, acesse a documentação gerada e teste por lá:
+
+```
+http://localhost:8000/docs/index.html
+```

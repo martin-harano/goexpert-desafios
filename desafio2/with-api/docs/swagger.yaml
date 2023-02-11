@@ -1,0 +1,63 @@
+basePath: /
+definitions:
+  dto.GetCepOutput:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      code:
+        type: string
+      district:
+        type: string
+      state:
+        type: string
+    type: object
+  handlers.Error:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: martin.harano@fullcycle.com.br
+    name: Martin Harano
+    url: https://github.com/martin-harano
+  description: API to demonstrate multithreading
+  license:
+    name: Martin Harano License
+    url: https://github.com/martin-harano
+  termsOfService: http://swagger.io/terms/
+  title: Desafio2 - Multithread
+  version: "1.0"
+paths:
+  /cep/{code}:
+    get:
+      consumes:
+      - application/json
+      description: Get a CEP
+      parameters:
+      - description: ZIP code
+        format: 8-digit number
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetCepOutput'
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.Error'
+      summary: Get a CEP
+      tags:
+      - CEP
+swagger: "2.0"

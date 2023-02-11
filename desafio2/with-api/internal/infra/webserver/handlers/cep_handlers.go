@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/martin-harano/goexpert-desafios/tree/main/desafio2/with-api/internal/dto"
 	"github.com/martin-harano/goexpert-desafios/tree/main/desafio2/with-api/internal/entity"
 	"github.com/martin-harano/goexpert-desafios/tree/main/desafio2/with-api/internal/infra/webclient"
 )
@@ -22,6 +23,17 @@ func NewCepHandler() *CepHandler {
 	return &CepHandler{}
 }
 
+// GetCep godoc
+// @Summary      Get a CEP
+// @Description  Get a CEP
+// @Tags         CEP
+// @Accept       json
+// @Produce      json
+// @Param        code   path      string  true  "ZIP code" Format(8-digit number)
+// @Success      200  {object}  dto.GetCepOutput
+// @Failure      404
+// @Failure      500  {object}  Error
+// @Router       /cep/{code} [get]
 func (h *CepHandler) GetCep(w http.ResponseWriter, r *http.Request) {
 	code := chi.URLParam(r, "code")
 	if code == "" {
@@ -65,7 +77,14 @@ func (h *CepHandler) GetCep(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *CepHandler) WriteResponse(w http.ResponseWriter, apiName string, cep *entity.Cep) {
-	result, err := json.Marshal(cep)
+	cepDto := dto.GetCepOutput{
+		Code:     cep.Code,
+		State:    cep.State,
+		City:     cep.City,
+		District: cep.District,
+		Address:  cep.Address,
+	}
+	result, err := json.Marshal(cepDto)
 	if err != nil {
 		response := Error{StatusCode: http.StatusBadGateway, Message: err.Error()}
 		response.WriteResponse(w)
@@ -74,7 +93,7 @@ func (h *CepHandler) WriteResponse(w http.ResponseWriter, apiName string, cep *e
 	fmt.Fprintf(os.Stderr, "CEP obtido pela api %s: %v\n", apiName, string(result))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(cep)
+	w.Write(result)
 }
 
 func (h *CepHandler) validateCep(code string) error {
