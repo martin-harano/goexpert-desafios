@@ -51,6 +51,13 @@ func (c *ViaCepClient) Provide(cep string, result chan<- entity.Cep) {
 		State:    apiCep.Uf,
 		City:     apiCep.Localidade,
 		District: apiCep.Bairro,
-		Address:  fmt.Sprintf("%s - %s", apiCep.Logradouro, apiCep.Complemento),
+		Address:  fmt.Sprintf("%s%s", apiCep.Logradouro, c.addAddressComplement(apiCep.Complemento)),
 	}
+}
+
+func (c *ViaCepClient) addAddressComplement(AddressComplement string) string {
+	if len(AddressComplement) == 0 {
+		return ""
+	}
+	return " - " + AddressComplement
 }
