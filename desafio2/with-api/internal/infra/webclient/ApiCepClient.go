@@ -15,7 +15,7 @@ type ApiCepClient struct {
 	Discard *atomic.Bool
 }
 
-type apiCepDto struct {
+type apiCepDtoResponse struct {
 	Code       string `json:"code"`
 	State      string `json:"state"`
 	City       string `json:"city"`
@@ -36,7 +36,7 @@ func (c *ApiCepClient) Provide(cep string, result chan<- entity.Cep) {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ApiCepClient: Erro ao ler resposta: %v\n", err)
 	}
-	var apiCep apiCepDto
+	var apiCep apiCepDtoResponse
 	err = json.Unmarshal(res, &apiCep)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ApiCepClient: Erro ao fazer parse da resposta: %v\n", err)

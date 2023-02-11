@@ -15,7 +15,7 @@ type ViaCepClient struct {
 	Discard *atomic.Bool
 }
 
-type viaCepDtoInput struct {
+type viaCepDtoResponse struct {
 	Cep         string `json:"cep"`
 	Logradouro  string `json:"logradouro"`
 	Complemento string `json:"complemento"`
@@ -38,7 +38,7 @@ func (c *ViaCepClient) Provide(cep string, result chan<- entity.Cep) {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ViaCepClient: Erro ao ler resposta: %v\n", err)
 	}
-	var apiCep viaCepDtoInput
+	var apiCep viaCepDtoResponse
 	err = json.Unmarshal(res, &apiCep)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ViaCepClient: Erro ao fazer parse da resposta: %v\n", err)
