@@ -29,10 +29,11 @@ func NewCepHandler() *CepHandler {
 // @Tags         CEP
 // @Accept       json
 // @Produce      json
-// @Param        code   path      string  true  "ZIP code" Format(8-digit number)
-// @Success      200  {object}  dto.GetCepOutput
-// @Failure      404
-// @Failure      500  {object}  Error
+// @Param        code   path      string  true  "ZIP code (exact 8 number digits)"
+// @Success      200  {object}  CEP
+// @Failure      400  {object}  ERROR
+// @Failure      500  {object}  ERROR
+// @Failure      504  {object}  ERROR "No response from servers" example(test)
 // @Router       /cep/{code} [get]
 func (h *CepHandler) GetCep(w http.ResponseWriter, r *http.Request) {
 	code := chi.URLParam(r, "code")

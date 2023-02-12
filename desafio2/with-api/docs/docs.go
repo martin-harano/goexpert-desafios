@@ -40,8 +40,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "format": "8-digit number",
-                        "description": "ZIP code",
+                        "description": "ZIP code (exact 8 number digits)",
                         "name": "code",
                         "in": "path",
                         "required": true
@@ -51,16 +50,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.GetCepOutput"
+                            "$ref": "#/definitions/CEP"
                         }
                     },
-                    "404": {
-                        "description": "Not Found"
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ERROR"
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/ERROR"
+                        }
+                    },
+                    "504": {
+                        "description": "No response from servers\" example(test)",
+                        "schema": {
+                            "$ref": "#/definitions/ERROR"
                         }
                     }
                 }
@@ -68,27 +76,32 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.GetCepOutput": {
+        "CEP": {
             "type": "object",
             "properties": {
                 "address": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Rua Paula Rodrigues"
                 },
                 "city": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Osasco"
                 },
                 "code": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "06233-030"
                 },
                 "district": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Piratininga"
                 },
                 "state": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "SP"
                 }
             }
         },
-        "handlers.Error": {
+        "ERROR": {
             "type": "object",
             "properties": {
                 "message": {

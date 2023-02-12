@@ -1,19 +1,24 @@
 basePath: /
 definitions:
-  dto.GetCepOutput:
+  CEP:
     properties:
       address:
+        example: Rua Paula Rodrigues
         type: string
       city:
+        example: Osasco
         type: string
       code:
+        example: 06233-030
         type: string
       district:
+        example: Piratininga
         type: string
       state:
+        example: SP
         type: string
     type: object
-  handlers.Error:
+  ERROR:
     properties:
       message:
         type: string
@@ -38,8 +43,7 @@ paths:
       - application/json
       description: Get a CEP
       parameters:
-      - description: ZIP code
-        format: 8-digit number
+      - description: ZIP code (exact 8 number digits)
         in: path
         name: code
         required: true
@@ -50,13 +54,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.GetCepOutput'
-        "404":
-          description: Not Found
+            $ref: '#/definitions/CEP'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ERROR'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Error'
+            $ref: '#/definitions/ERROR'
+        "504":
+          description: No response from servers" example(test)
+          schema:
+            $ref: '#/definitions/ERROR'
       summary: Get a CEP
       tags:
       - CEP
